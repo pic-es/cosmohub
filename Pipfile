@@ -1,0 +1,29 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+black = "==19.10b0"
+flake8 = "*"
+reorder-python-imports = "*"
+pytest = "*"
+coverage = "*"
+hypothesis-sqlalchemy = ">=0.3.2"
+setuptools-scm = "*"
+codecov = "*"
+
+[packages]
+flask = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+sqlalchemy = ">=1.2"
+psycopg2-binary = "*"
+pyyaml = "*"
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
+webargs = "*"
+sentry-sdk = {extras = ["flask", "sqlalchemy"],version = "*"}
+
+[requires]
+python_version = "3.6"

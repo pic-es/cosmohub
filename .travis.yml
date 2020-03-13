@@ -1,0 +1,32 @@
+os: linux
+arch: amd64
+dist: bionic
+language: python
+
+services:
+  - postgresql
+
+env:
+  FLASK_ENV : ci
+
+before_install:
+  - >
+    curl -LSs "$(
+      curl -LSs https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest |
+      jq -r '.assets | map({name, browser_download_url} | select(.name | endswith(".jar"))) |
+      .[0].browser_download_url'
+    )" -o codacy-coverage-reporter-assembly.jar
+
+install:
+  - pipenv install --dev
+
+before_script:
+  - psql -c 'CREATE DATABASE cosmohub_ci' -U postgres
+
+script:
+  - cd cosmohub && FLASK_APP=__init__.py flask db upgrade && cd ..
+  - coverage run --source=cosmohub -m pytest
+
+after_success:
+  - codecov
+  - java -jar codacy-coverage-reporter-assembly.jar report -l python -r coverage.xml
